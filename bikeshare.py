@@ -171,13 +171,12 @@ def station_stats(df):
 
   
 def convert(seconds): 
-    """Converts seconds into days, hours, minutes and seconds."""
+    """Converts seconds into hours, minutes and seconds."""
     
     minute, sec = divmod(seconds, 60) 
-    hour, minute = divmod(minute, 60) 
-    day, hour = divmod(hour, 24)
+    hour, minute = divmod(minute, 60)
     
-    return day, hour, minute, sec
+    return hour, minute, sec
 
 
 def trip_duration_stats(df):
@@ -188,14 +187,14 @@ def trip_duration_stats(df):
 
     # Display total travel time
     tot_travel = df['Trip Duration'].sum()
-    tot_days, tot_hours, tot_minutes, tot_seconds = convert(tot_travel)
+    tot_hours, tot_minutes, tot_seconds = convert(tot_travel)
 
     # Display mean travel time
     mean_travel = df['Trip Duration'].mean()
-    mean_days, mean_hours, mean_minutes, mean_seconds = convert(int(mean_travel))
+    mean_hours, mean_minutes, mean_seconds = convert(int(mean_travel))
 
-    print('\nTotal travel time is %s days, %s hours, %s minutes and %s seconds.' % (tot_days, tot_hours, tot_minutes, tot_seconds))
-    print('Mean travel time is %s days, %s hours, %s minutes and %s seconds.' % (mean_days, mean_hours, mean_minutes, mean_seconds))
+    print('\nTotal travel time is %s hours, %s minutes and %s seconds.' % (tot_hours, tot_minutes, tot_seconds))
+    print('Mean travel time is %s hours, %s minutes and %s seconds.' % (mean_hours, mean_minutes, mean_seconds))
     
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
@@ -208,7 +207,7 @@ def user_stats(df):
     start_time = time.time()
 
     # Display counts of user types
-    user_types = df['User Type'].value_counts()
+    user_types = df.groupby('User Type')['User Type'].count()
     print('User types and their corresponding counts are: \n%s.' % user_types)
     
 
